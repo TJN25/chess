@@ -74,6 +74,7 @@ def main():
                     moveMade = True
 
         if moveMade:
+            animateMove(gs.movelog[-1], screen, gs.board, clock)
             validMoves = gs.getValidMoves()
             moveMade = False
 
@@ -117,6 +118,7 @@ Draw the squares on the board.  The top left square is always light.
 
 
 def drawBoard(screen):
+    global colors
     colors = [p.Color("white"), p.Color("gray")]
     for r in range(DIMENSION):
         for c in range(DIMENSION):
@@ -136,6 +138,31 @@ def drawPieces(screen, board):
             if piece != "--":  # not an empty square
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
+'''
+Animating a move
+'''
+
+def animateMove(move, screen, board, clock):
+    global colors
+    coords = [] # list of coords that the animation will move through
+    dR = move.endRow - move.startRow
+    dC = move.endCol - move.startCol
+    # framesPerSquare = 10
+    # frameCount = (abs(dR) + abs(dC)) * framesPerSquare
+    frameCount = 6
+    for frame in range(frameCount + 1):
+        r, c = ((move.startRow + dR*frame/frameCount, move.startCol + dC*frame/frameCount))
+        drawBoard(screen)
+        drawPieces(screen, board)
+        #erase the piece moved from ending square
+        color = colors[(move.endRow + move.endCol) % 2]
+        endSquare = p.Rect(move.endCol*SQ_SIZE, move.endRow*SQ_SIZE, SQ_SIZE, SQ_SIZE)
+        p.draw.rect(screen, color, endSquare)
+        if move.pieceCaptured != '--':
+            screen.blit(IMAGES[move.pieceCaptured], endSquare)
+        screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+        p.display.flip()
+        clock.tick(60)
 
 if __name__ == '__main__':
     main()
