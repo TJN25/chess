@@ -539,9 +539,9 @@ class GameState():
     def getCastleMoves(self, r, c, moves, allyColor):
         if self.inCheck:
             return #can't castle in check
-        if (self.whiteToMove and self.currentCastlingRights.wks) or (not self.whiteToMove and self.currentCastlingRights.wks):
+        if (self.whiteToMove and self.currentCastlingRights.wks) or (not self.whiteToMove and self.currentCastlingRights.bks):
             self.getKingSideCastleMoves(r, c, moves)
-        if (self.whiteToMove and self.currentCastlingRights.wqs) or (not self.whiteToMove and self.currentCastlingRights.wqs):
+        if (self.whiteToMove and self.currentCastlingRights.wqs) or (not self.whiteToMove and self.currentCastlingRights.bqs):
             self.getQueenSideCastleMoves(r, c, moves)
 
 
