@@ -33,8 +33,8 @@ class GameState():
         self.staleMate = False
         self.enpassantPossible = () #coordinates where an en passant capture is possible
         self.currentCastlingRights = CastleRights(True, True, True, True)
-        self.castleRightsLog = [CastleRights(self.currentCastlingRights.wqs, self.currentCastlingRights.wks,
-                                             self.currentCastlingRights.bks, self.currentCastlingRights.bqs)]
+        self.castleRightsLog = [CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks,
+                                             self.currentCastlingRights.wqs, self.currentCastlingRights.bqs)]
 
 
         '''
@@ -74,8 +74,8 @@ class GameState():
 
         #update castling rights - whenever a king or rook moves
         self.updateCastleRights(move)
-        self.castleRightsLog.append(CastleRights(self.currentCastlingRights.wqs, self.currentCastlingRights.wks,
-                                             self.currentCastlingRights.bks, self.currentCastlingRights.bqs))
+        self.castleRightsLog.append(CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks,
+                                             self.currentCastlingRights.wqs, self.currentCastlingRights.bqs))
 
 
     def undoMove(self):
@@ -242,7 +242,6 @@ class GameState():
                 self.getKingMoves(kingRow, kingCol, moves)
         else:  # not in check - all moves are fine
             moves = self.getAllPossibleMoves()
-        print(len(moves))
         if len(moves) == 0:
             if self.inCheck:
                 self.checkMate = True
