@@ -107,6 +107,9 @@ class GameState():
                 else:
                     self.board[move.endRow][move.endCol - 2] = self.board[move.endRow][move.endCol + 1]
                     self.board[move.endRow][move.endCol + 1] = '--'
+            self.checkMate = False
+            self.staleMate = False
+
 
     def updateCastleRights(self, move):
         if move.pieceMoved == 'wK':
@@ -239,13 +242,12 @@ class GameState():
                 self.getKingMoves(kingRow, kingCol, moves)
         else:  # not in check - all moves are fine
             moves = self.getAllPossibleMoves()
+        print(len(moves))
         if len(moves) == 0:
             if self.inCheck:
                 self.checkMate = True
             else:
                 self.staleMate = True
-        self.checkMate = False
-        self.staleMate = False
         return moves
 
 
