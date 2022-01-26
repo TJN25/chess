@@ -42,7 +42,7 @@ def main():
     sqSelected = ()  # no square is selected initially, keep track of the last click of the user (tuple: (row, col))
     playerClicks = []  # keep track of the player clicks (two tuples: [(6, 4), (4, 4)])
     gameOver = False
-    playerOne = True #If a Human is playing white, then this will be True. If an AI is playing then False.
+    playerOne = False #If a Human is playing white, then this will be True. If an AI is playing then False.
     playerTwo = False #If a Human is playing black, then this will be True. If an AI is playing then False.
     aiCanMove = True
     while running:
