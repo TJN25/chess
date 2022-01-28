@@ -19,6 +19,18 @@ class GameState():
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
         ]
+
+        # self.board = [
+        #     ["bR", "bN", "--", "bQ", "bK", "--", "bN", "bR"],
+        #     ["bp", "bp", "--", "--", "bp", "bp", "bB", "bp"],
+        #     ["--", "--", "bp", "--", "--", "--", "bp", "--"],
+        #     ["--", "--", "--", "bp", "--", "--", "--", "--"],
+        #     ["--", "--", "--", "--", "--", "--", "--", "--"],
+        #     ["wN", "wp", "--", "--", "--", "wN", "wp", "--"],
+        #     ["wp", "--", "wp", "wp", "wp", "wp", "wB", "wp"],
+        #     ["wR", "--", "wB", "wQ", "wK", "--", "--", "wR"]
+        # ]
+
         self.moveFunctions = {'p': self.getPawnMoves, 'R': self.getRookMoves, 'N': self.getKnightMoves,
                               'B': self.getBishopMoves, 'Q': self.getQueenMoves, 'K': self.getKingMoves}
 
@@ -32,6 +44,7 @@ class GameState():
         self.checkMate = False
         self.staleMate = False
         self.enpassantPossible = () #coordinates where an en passant capture is possible
+        self.enpassantPossibleLog = [self.enpassantPossible]
         self.currentCastlingRights = CastleRights(True, True, True, True)
         self.castleRightsLog = [CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks,
                                              self.currentCastlingRights.wqs, self.currentCastlingRights.bqs)]
@@ -76,6 +89,7 @@ class GameState():
         self.updateCastleRights(move)
         self.castleRightsLog.append(CastleRights(self.currentCastlingRights.wks, self.currentCastlingRights.bks,
                                              self.currentCastlingRights.wqs, self.currentCastlingRights.bqs))
+        self.enpassantPossibleLog.append(self.enpassantPossible)
 
 
     def undoMove(self):
@@ -91,9 +105,10 @@ class GameState():
             if move.isEnpassantMove:
                 self.board[move.endRow][move.endCol] = "--"
                 self.board[move.startRow][move.endCol] = move.pieceCaptured
-                self.enpassantPossible = (move.endRow, move.endCol)
-            if move.pieceMoved[1] == 'p' and abs(move.startRow - move.endRow) == 2:
-                self.enpassantPossible = ()
+
+            #undo en passant rights
+            self.enpassantPossibleLog.pop() #get rid of the last en passant state
+            self.enpassantPossible = self.enpassantPossibleLog[-1] #set the en passant rights to current state
 
             #undo castling rights
             self.castleRightsLog.pop() #get rid of the last castle rights
@@ -130,6 +145,20 @@ class GameState():
                     self.currentCastlingRights.bqs = False
                 elif move.startCol == 7:
                     self.currentCastlingRights.bks = False
+        if move.pieceCaptured == 'wR':
+            if move.endRow == 7:
+                if move.endRow == 0:
+                    self.currentCastlingRights.wqs = False
+                elif move.endRow == 7:
+                    self.currentCastlingRights.wks = False
+        elif move.pieceCaptured == 'bR':
+            if move.endRow == 0:
+                if move.endRow == 0:
+                    self.currentCastlingRights.bqs = False
+                elif move.endRow == 7:
+                    self.currentCastlingRights.bks = False
+
+
 
     '''
     check if there are pins and checks. Still need to check with en passant moves and castling.

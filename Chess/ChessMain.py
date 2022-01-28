@@ -42,8 +42,8 @@ def main():
     sqSelected = ()  # no square is selected initially, keep track of the last click of the user (tuple: (row, col))
     playerClicks = []  # keep track of the player clicks (two tuples: [(6, 4), (4, 4)])
     gameOver = False
-    playerOne = False #If a Human is playing white, then this will be True. If an AI is playing then False.
-    playerTwo = False #If a Human is playing black, then this will be True. If an AI is playing then False.
+    playerOne = True #If a Human is playing white, then this will be True. If an AI is playing then False.
+    playerTwo = True #If a Human is playing black, then this will be True. If an AI is playing then False.
     aiCanMove = True
     while running:
         humanTurn = (gs.whiteToMove and playerOne) or (not gs.whiteToMove and playerTwo)
@@ -99,10 +99,14 @@ def main():
         #AI move finder
         if not gameOver and not humanTurn and aiCanMove:
             aiMove = SmartMoveFinder.findBestMove(gs, validMoves)
+            if aiMove is None:
+                aiMove = SmartMoveFinder.findRandomMove(validMoves)
+
             gs.makeMove(aiMove)
+            print(aiMove.getChessNotation())
             moveMade = True
             animate = True
-
+            aiCanMove = False
         if moveMade:
             if animate:
                 animateMove(gs.movelog[-1], screen, gs.board, clock)
@@ -202,6 +206,9 @@ def animateMove(move, screen, board, clock):
         endSquare = p.Rect(move.endCol*SQ_SIZE, move.endRow*SQ_SIZE, SQ_SIZE, SQ_SIZE)
         p.draw.rect(screen, color, endSquare)
         if move.pieceCaptured != '--':
+            if move.isEnpassantMove:
+                enPassantRow = (move.endRow + 1) if move.pieceCaptured[0] == 'b' else (move.endRow - 1)
+                endSquare = p.Rect(move.endCol * SQ_SIZE, enPassantRow * SQ_SIZE, SQ_SIZE, SQ_SIZE)
             screen.blit(IMAGES[move.pieceCaptured], endSquare)
         screen.blit(IMAGES[move.pieceMoved], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
         p.display.flip()
