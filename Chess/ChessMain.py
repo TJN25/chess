@@ -118,12 +118,12 @@ def main():
         if gs.checkMate:
             gameOver = True
             if gs.whiteToMove:
-                drawText(screen, "Black wins by checkmate")
+                drawEndText(screen, "Black wins by checkmate")
             else:
-                drawText(screen, "White wins by checkmate")
+                drawEndText(screen, "White wins by checkmate")
         elif gs.staleMate:
             gameOver = True
-            drawText(screen, "Stalemate")
+            drawEndText(screen, "Stalemate")
         else:
             gameOver = False
         clock.tick(MAX_FPS)
@@ -214,13 +214,16 @@ def animateMove(move, screen, board, clock):
         p.display.flip()
         clock.tick(60)
 
-def drawText(screen, text):
+def drawEndText(screen, text):
     font = p.font.SysFont("Helvitica", 32, True, False)
     textObject = font.render(text, 0, p.Color('Gray'))
     textLocation = p.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT/2 - textObject.get_height()/2)
     screen.blit(textObject, textLocation)
     textObject = font.render(text, 0, p.Color('Black'))
     screen.blit(textObject, textLocation.move(2,2))
+
+def drawText():
+    
 
 if __name__ == '__main__':
     main()
