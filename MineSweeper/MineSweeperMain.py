@@ -186,7 +186,7 @@ def drawHeaderRegion(screen, gs):
 def drawEndText(screen, text):
     font = p.font.SysFont("Helvitica", 32, True, False)
     textObject = font.render(text, 0, p.Color('Gray'))
-    textLocation = p.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT/2 - textObject.get_height()/2)
+    textLocation = p.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2,  textObject.get_height()/2)
     screen.blit(textObject, textLocation)
     textObject = font.render(text, 0, p.Color('Black'))
     screen.blit(textObject, textLocation.move(2,2))
