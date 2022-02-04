@@ -158,12 +158,13 @@ class GameState():
     def chooseMines(self, mines, rowCount, colCount):
         self.rowCount = rowCount
         self.colCount = colCount
-        self.mineSquares = random.sample(range(rowCount*colCount), mines)
+        # self.mineSquares = random.sample(range(rowCount*colCount), mines)
+        self.mineSquares = [92, 114, 2, 213, 174, 120, 159, 31, 173, 141, 72, 4, 164, 63, 28, 147, 18, 178, 138, 167, 103, 108, 171, 26, 111, 166, 64, 9, 217, 126, 200, 194, 175, 36, 117, 88, 37, 66, 203, 61]
         # print(self.mineSquares)
         for selectedSq in self.mineSquares:
             row = math.floor(selectedSq / rowCount)
             col = selectedSq % colCount
-            # print(row, col, self.board[row][col])
+            print(row, col, self.board[row][col])
             self.board[row][col] = 'x'
 
     def getSqaureValues(self):
@@ -186,7 +187,7 @@ class GameState():
         if clickValue == 'x':
             self.gameOver = True
             self.mineClicked = True
-            self.showEndState()
+            # self.showEndState()
         if clickValue == 0:
             self.selectedBoard[row][col] = clickValue
             self.setAllZeros(row, col)

@@ -1,5 +1,6 @@
 import pygame as p
 from Minesweeper import MinesweeperEngine as mine, findSafeSquares as fs
+import neat
 
 '''
 Set up values.
@@ -59,23 +60,25 @@ def main():
                     if gs.gameOver:
                         pass
                     else:
-                        availableSquares, safeSquares = fs.countAvailableSquares(gs.selectedBoard, DIMENSION_ROWS, DIMENSION_COLS)
+                        availableSquares, safeSquares = fs.checkMultipleSquares(gs.selectedBoard, DIMENSION_ROWS, DIMENSION_COLS)
                         if availableSquares is None and safeSquares is None:
                             move = gs.getSafeSquare()
-                            print('using getSafeMove')
-                            gs.doClick(move[0], move[1])
+                            # possibleSquares = fs.checkMultipleSquares(gs.selectedBoard, DIMENSION_ROWS, DIMENSION_COLS)
+                            # print(availableSquares)
+                            # gs.doClick(move[0], move[1])
                         else:
                             if availableSquares is None:
                                 print('None returned')
                                 pass
                             else:
-                                print(availableSquares)
+                                # print(availableSquares)
                                 for move in availableSquares:
+                                    # print(move)
                                     gs.doFlagClick(move[0], move[1])
                             if safeSquares is None:
                                 print('No safe squares')
                             else:
-                                print(safeSquares)
+                                # print(safeSquares)
                                 for move in safeSquares:
                                     gs.doClick(move[0], move[1])
 
@@ -84,6 +87,8 @@ def main():
                     gs.chooseMines(MINES, DIMENSION_ROWS, DIMENSION_COLS)
                     gs.getSqaureValues()
                     screen.fill(p.Color(DARK_GRAY))
+                if e.key == p.K_p:
+                    print(gs.mineSquares)
 
         drawGameState(screen, gs)
         if gs.gameOver:
@@ -95,8 +100,8 @@ def main():
             availableSquares, safeSquares = fs.countAvailableSquares(gs.selectedBoard, DIMENSION_ROWS, DIMENSION_COLS)
             if availableSquares is None and safeSquares is None:
                 move = gs.getSafeSquare()
-                print('using getSafeMove')
-                gs.doClick(move[0], move[1])
+                # print('using getSafeMove')
+                # gs.doClick(move[0], move[1])
 
         clock.tick(MAX_FPS)
         p.display.flip()
