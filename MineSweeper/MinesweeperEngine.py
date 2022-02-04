@@ -158,8 +158,9 @@ class GameState():
     def chooseMines(self, mines, rowCount, colCount):
         self.rowCount = rowCount
         self.colCount = colCount
-        self.mineSquares = random.sample(range(rowCount*colCount), mines)
-        # self.mineSquares = [92, 114, 2, 213, 174, 120, 159, 31, 173, 141, 72, 4, 164, 63, 28, 147, 18, 178, 138, 167, 103, 108, 171, 26, 111, 166, 64, 9, 217, 126, 200, 194, 175, 36, 117, 88, 37, 66, 203, 61]
+        # self.mineSquares = random.sample(range(rowCount*colCount), mines)
+        self.mineSquares = [2, 3, 5, 6, 26, 29, 35, 36, 43, 46, 48, 52, 66, 68, 71, 72, 76, 89, 95, 96, 100, 104, 108, 118, 125, 128, 141, 143, 147, 148, 149, 150, 152, 156, 168, 170, 185, 190, 214, 215]
+        self.mineSquares = sorted(self.mineSquares)
         # print(self.mineSquares)
         for selectedSq in self.mineSquares:
             row = math.floor(selectedSq / rowCount)
@@ -204,8 +205,8 @@ class GameState():
             self.selectedBoard[row][col] = 'flag'
             if clickValue == 'x':
                 self.minesFlagged += 1
-                if self.minesFlagged == len(self.mineSquares):
-                    self.gameOver = True
+                # if self.minesFlagged == len(self.mineSquares):
+                #     self.gameOver = True
 
     def setAllZeros(self, row, col):
         directions = [(0,1), (1,0), (0, -1), (-1, 0)]
@@ -258,6 +259,8 @@ class GameState():
             for col in range(0, self.colCount):
                 if self.selectedBoard[row][col] == '-':
                     remainingSquares += 1
+        if remainingSquares == 0:
+            self.gameOver = True
         return remainingSquares
 
     def getMinesRemaining(self):
